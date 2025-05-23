@@ -20,7 +20,8 @@ curl -X POST http://127.0.0.1:5000/predict_model -H "Content-Type: application/j
 from fastapi import FastAPI, Request, HTTPException
 import pickle
 import pandas as pd
-from pydantic import BaseModel
+from pydantic import BaseModel # определяет правила для API запросов
+import uvicorn
 
 app = FastAPI()
 
@@ -37,15 +38,15 @@ class PredictionInput(BaseModel):
     Age: float
     Fare: float
 
-@app.get("/stats")
+@app.get("/stats")  #название "/stats" запрос get
 def stats():
-    return {"request_count": request_count}
+    return {"request_count": request_count}  #выводит словарик: счетчик запросов, сколько раз обращались
 
 @app.get("/health")
 def health():
-    return {"status": "OK"}
+    return {"status": "OK"}  #выводит состояние ОК
 
-@app.post("/predict_model")
+@app.post("/predict_model")  #название "/predict_model" запрос post
 def predict_model(input_data: PredictionInput):
     global request_count
     request_count += 1
@@ -66,5 +67,4 @@ def predict_model(input_data: PredictionInput):
     return {"prediction": result}
 
 if __name__ == '__main__':
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=5000)

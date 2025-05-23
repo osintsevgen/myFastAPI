@@ -3,3 +3,5 @@
 *.md
 .git
 streamlit_app.py
+train.py
+Dockerfile
